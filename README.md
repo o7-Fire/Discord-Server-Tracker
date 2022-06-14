@@ -1,5 +1,5 @@
 # Discord-Server-Tracker
-sponsored by 3 letter agencies\
+sponsored by 3 letter agencies
 
 # How to Use
 1. install discord.py-self (pip install discord.py-self)
@@ -9,3 +9,4 @@ sponsored by 3 letter agencies\
 
 # What it currently has
 - copies every category and channel inside category
+- creates webhook in all the text channel and saves it
