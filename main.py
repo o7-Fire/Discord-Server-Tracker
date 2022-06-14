@@ -46,8 +46,9 @@ async def on_message(message):
 			newcategory = await newguild.create_category(category.name)
 			for channel in category.channels:
 				newchannel = await createbasedontype(channel, newguild, newcategory)
-				webhook = await newchannel.create_webhook(name="webhook name here")
-				messagetowrite += f"{str(channel.id)} {webhook.url} "
+				if newchannel.type == discord.ChannelType.text:
+					webhook = await newchannel.create_webhook(name="webhook name here")
+					messagetowrite += f"{str(channel.id)} {webhook.url} "
 				
 		with open("server-data.txt", "w+") as f:
 			f.write(messagetowrite + "\n")
