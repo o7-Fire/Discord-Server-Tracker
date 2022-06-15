@@ -1,5 +1,6 @@
 # Discord-Server-Tracker
-sponsored by 3 letter agencies
+sponsored by 3 letter agencies\
+note that selfbots cant run 24/7
 
 # How to Use
 1. install discord.py-self (pip install discord.py-self)
@@ -10,3 +11,4 @@ sponsored by 3 letter agencies
 # What it currently has
 - copies every category and channel inside category
 - creates webhook in all the text channel and saves it
+- copies all mesages from original server to copied server along with attachments
