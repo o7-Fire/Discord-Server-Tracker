@@ -40,7 +40,6 @@ async def on_message(message):
 	#	return
 	#this handles the message copying process
 	if str(message.guild.id) in servertotrack:
-		print(message)
 		serverval = servertotrack[str(message.guild.id)]
 		channelwebhook = serverval[str(message.channel.id)]
 		webhook = Webhook.from_url(channelwebhook, adapter=webhookadapter)
