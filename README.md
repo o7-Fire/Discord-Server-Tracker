@@ -12,3 +12,4 @@ note that selfbots cant run 24/7
 - copies every category and channel inside category
 - creates webhook in all the text channel and saves it
 - copies all mesages from original server to copied server along with attachments and embeds (for bots)
+- store data in ./data, dataminingfeatureenabled=True in main.py line 10
