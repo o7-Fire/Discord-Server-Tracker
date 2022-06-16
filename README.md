@@ -11,4 +11,4 @@ note that selfbots cant run 24/7
 # What it currently has
 - copies every category and channel inside category
 - creates webhook in all the text channel and saves it
-- copies all mesages from original server to copied server along with attachments
+- copies all mesages from original server to copied server along with attachments and embeds (for bots)
