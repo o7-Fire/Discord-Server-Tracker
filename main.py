@@ -119,7 +119,9 @@ async def on_message(message):
 	if message.content.startswith("exec"):
 		toexec = message.content.replace("exec\n", "", 1)
 		await message.channel.send(exec(toexec))
-	if message.content == "tdo":
-		print("do nothing")
+	if message.content == "cpi":
+		await client.change_presence(status=discord.Status.invisible)
+	if message.content == "cpo":
+		await client.change_presence(status=discord.Status.online)
 
 client.run(TOKEN)
