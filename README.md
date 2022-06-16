@@ -3,6 +3,7 @@ sponsored by 3 letter agencies\
 note that selfbots cant run 24/7
 
 # How to Use
+0. uninstall discord.py / nextcord (pip uninstall discord.py) for selfbot
 1. install discord.py-self (pip install discord.py-self)
 2. put in your user token
 3. type copyserver (server id to copy) in any channel
