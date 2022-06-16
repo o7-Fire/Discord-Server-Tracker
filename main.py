@@ -1,6 +1,8 @@
 import discord
 import time
 import os
+import random
+import string
 from discord import Webhook, RequestsWebhookAdapter
 
 TOKEN = ""
@@ -47,12 +49,19 @@ async def on_message(message):
 			webhook.send(username=str(message.author), avatar_url=message.author.avatar_url, content=message.content, embeds=message.embeds)
 		elif message.attachments:
 			files = []
+			filestodelete = []
 			for attachment in message.attachments:
 				if attachment.size < 8000000:
-					await attachment.save(fp=f"./temp/{attachment.filename}")
-					files.append(discord.File(f"./temp/{attachment.filename}"))
-					os.remove(f"./temp/{attachment.filename}")
+					randomname = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase) for i in range(10))
+					attachname = attachment.filename
+					thenewname = f"./temp/{attachname.split('.')[0]}{randomname}.{attachname.split('.')[1]}"
+					await attachment.save(fp=thenewname)
+					files.append(discord.File(thenewname))
+					filestodelete.append(thenewname)
 			webhook.send(username=str(message.author), avatar_url=message.author.avatar_url, content=message.content, files=files)
+			files = [] #deletes it
+			for f in filestodelete:
+				os.remove(f)
 		else:
 			webhook.send(username=str(message.author), avatar_url=message.author.avatar_url, content=message.content)
 			
