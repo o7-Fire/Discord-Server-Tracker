@@ -1,15 +1,36 @@
 import discord
+from discord import Webhook, RequestsWebhookAdapter
 import time
 import os
 import random
 import string
-from discord import Webhook, RequestsWebhookAdapter
+import json
 
 TOKEN = ""
+dataminingfeatureenabled = True #if you want to data mine
+
 client = discord.Client()
 webhookadapter = RequestsWebhookAdapter()
 servertotrack = {}
 
+def save_data(author, content, serverid, attachmentlinks=[]):
+	path = f"./data/{str(serverid)}.txt"
+	if not os.path.exists(path):
+		with open(path, "w+") as f:
+			donothingvalue = 0
+	tosave = {
+		"id": str(author.id),
+		"strname": str(author),
+		"displayname": author.display_name,
+		"avatar": str(author.avatar_url),
+		"status": author.status,
+		"content": content,
+		"attachments": attachmentlinks,
+	}
+	with open(path, "a+") as f:
+		json.dump(tosave, f)
+		f.write("\n")
+		
 def updatelist():
 	with open("server-data.txt", "r") as f:
 		for line in f.read().split("\n"):
@@ -45,11 +66,12 @@ async def on_message(message):
 		serverval = servertotrack[str(message.guild.id)]
 		channelwebhook = serverval[str(message.channel.id)]
 		webhook = Webhook.from_url(channelwebhook, adapter=webhookadapter)
-		if message.embeds:
+		if message.embeds: #bots only
 			webhook.send(username=str(message.author), avatar_url=message.author.avatar_url, content=message.content, embeds=message.embeds)
 		elif message.attachments:
 			files = []
 			filestodelete = []
+			filelinks = []
 			for attachment in message.attachments:
 				if attachment.size < 8000000:
 					randomname = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase) for i in range(10))
@@ -58,12 +80,17 @@ async def on_message(message):
 					await attachment.save(fp=thenewname)
 					files.append(discord.File(thenewname))
 					filestodelete.append(thenewname)
+					filelinks.append(attachment.url)
 			webhook.send(username=str(message.author), avatar_url=message.author.avatar_url, content=message.content, files=files)
+			if dataminingfeatureenabled:
+				save_data(message.author, message.content, message.guild.id, filelinks)
 			files = [] #deletes it
 			for f in filestodelete:
 				os.remove(f)
 		else:
 			webhook.send(username=str(message.author), avatar_url=message.author.avatar_url, content=message.content)
+			if dataminingfeatureenabled:
+				save_data(message.author, message.content, message.guild.id)
 			
 	#after this line only client can run
 	if message.author.id != client.user.id:
@@ -82,11 +109,10 @@ async def on_message(message):
 				if newchannel.type == discord.ChannelType.text:
 					webhook = await newchannel.create_webhook(name="webhook name here")
 					messagetowrite += f"{str(channel.id)} {webhook.url} "
-					print(f"{str(channel.id)} {webhook.url} ")
+					#print(f"{str(channel.id)} {webhook.url} ")
 				
 		with open("server-data.txt", "a+") as f:
 			f.write(messagetowrite + "\n")
-		print(messagetowrite)
 		time.sleep(5)
 		updatelist()
 				
