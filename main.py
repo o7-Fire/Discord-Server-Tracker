@@ -44,7 +44,9 @@ async def on_message(message):
 		serverval = servertotrack[str(message.guild.id)]
 		channelwebhook = serverval[str(message.channel.id)]
 		webhook = Webhook.from_url(channelwebhook, adapter=webhookadapter)
-		if message.attachments:
+		if message.embeds:
+			webhook.send(username=str(message.author), avatar_url=message.author.avatar_url, content=message.content, embeds=message.embeds)
+		elif message.attachments:
 			files = []
 			for attachment in message.attachments:
 				if attachment.size < 8000000:
